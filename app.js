@@ -8,6 +8,7 @@ const orderRoutes = require('./api/routes/orders')
 const app = express();
 
 app.use(morgan('dev'));
+app.use(express.static('uploads'));
 app.use(bodyParser.urlencoded({
     extended: false
 }));

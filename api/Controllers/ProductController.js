@@ -54,11 +54,10 @@ exports.store = (req, res) => {
 //update product
 exports.update = (req, res) => {
     const id = req.params.product_id;
-    const updatedata = {};
-    for (const data of req.body) {
-        updatedata[data.propName] = data.value;
-    }
-    Product.update({
+    const updatedata = req.body;
+    console.log(updatedata);
+    
+    Product.updateOne({
             _id: id
         }, {
             $set: updatedata

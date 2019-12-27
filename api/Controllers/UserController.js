@@ -44,14 +44,25 @@ exports.signUp = (req, res) => {
         })
 }
 
-exports.login = (req,res) => {
-    
+exports.login = (req, res) => {
+    User.find({
+            email: req.body.email
+        })
+        .exec()
+        .then(user => {
+            if (user <1) {
+                res.status(404).json({
+                    message: 'Mail not found. User does not exist!'
+                })
+            }
+        })
+        .catch()
 }
 
 exports.delUser = (req, res) => {
     User.remove({
-        _id: req.params.user_id
-    })
+            _id: req.params.user_id
+        })
         .exec()
         .then(result => {
             console.log(result);

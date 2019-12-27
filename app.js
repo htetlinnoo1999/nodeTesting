@@ -2,8 +2,11 @@ const express = require('express');
 const morgan = require("morgan");
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+
+//routes import
 const productRoutes = require('./api/routes/products');
 const orderRoutes = require('./api/routes/orders')
+const userRoutes = require('./api/routes/users')
 
 const app = express();
 
@@ -20,6 +23,7 @@ let connect = async() => {
     "mongodb+srv://admin:" +process.env.MONGO_ATLAS_PW+ "@cluster0-o0eeu.mongodb.net/test?retryWrites=true&w=majority", {
         useUnifiedTopology: true,
         useNewUrlParser: true,
+        useCreateIndex: true
     })
 };
 
@@ -46,6 +50,7 @@ app.use((req, res, next) => {
 //Routes
 app.use('/products', productRoutes);
 app.use('/orders',orderRoutes);
+app.use('/user', userRoutes);
 
 app.use((req, res, next) => {
     const error = new Error("Route not found");

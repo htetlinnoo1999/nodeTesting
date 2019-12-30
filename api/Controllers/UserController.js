@@ -50,13 +50,13 @@ exports.login = (req, res) => {
         })
         .exec()
         .then(user => {
-            if (user <1) {
-                res.status(404).json({
-                    message: 'Mail not found. User does not exist!'
+            if (user < 1) {
+                res.status(401).json({
+                    message: 'AUTH FAILED!'
                 })
             }
         })
-        .catch()
+        .catch(err => res.status(500).json(err))
 }
 
 exports.delUser = (req, res) => {

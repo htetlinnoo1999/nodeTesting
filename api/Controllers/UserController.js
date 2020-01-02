@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const User = require('../Models/User');
 
 exports.signUp = (req, res) => {
@@ -45,7 +46,7 @@ exports.signUp = (req, res) => {
 }
 
 exports.login = (req, res) => {
-    User.find({
+    User.findOne({
             email: req.body.email
         })
         .exec()
@@ -55,6 +56,29 @@ exports.login = (req, res) => {
                     message: 'AUTH FAILED!'
                 })
             }
+            bcrypt.compare(req.body.password, user.password, (err, result) => {
+                if (err) {
+                    console.log(err);
+                    res.status(500).json('Auth error')
+                }
+                if (result) {
+                    const token = jwt.sign({
+                            email: user.email,
+                            user_id: user._id
+                        },
+                        process.env.JWT_KEY, {
+                            expiresIn: "1h"
+                        })
+                    console.log(result);
+                    res.status(200).json({
+                        message: 'Auth successful',
+                        token: token
+                    })
+                } else {
+                    console.log(result);
+                    res.status(500).json('Passowrd do not match')
+                }
+            })
         })
         .catch(err => res.status(500).json(err))
 }
